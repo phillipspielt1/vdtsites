@@ -217,7 +217,7 @@ export default function HomePage() {
     <div className="bg-white">
 
       {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-[#faf9f7]">
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-[#ece7de]">
         <div className="absolute inset-0 opacity-[0.018]" style={{
           backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
           backgroundRepeat: "repeat",
@@ -258,30 +258,64 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right: Preview collage */}
+            {/* Right: Asymmetric 3-col preview collage */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:grid grid-cols-2 gap-3"
+              className="hidden lg:grid grid-cols-3 gap-3"
+              style={{ gridTemplateRows: "155px 155px" }}
             >
-              {showcases.map((s, i) => (
-                <Link
-                  key={s.href}
-                  href={s.href}
-                  className={`group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${i === 4 ? "col-span-2" : ""}`}
-                  style={{ height: i === 4 ? "80px" : "140px" }}
-                >
-                  <div className="w-full h-full relative">
-                    <s.Preview />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                      <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">
-                        {s.label} →
-                      </span>
-                    </div>
+              {/* Minimal — tall, spans both rows */}
+              <Link href="/showcase/minimal"
+                className="row-span-2 group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-full h-full relative">
+                  <MinimalPreview />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Minimal →</span>
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+              {/* Playful — col 2, row 1 */}
+              <Link href="/showcase/playful"
+                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-full h-full relative">
+                  <PlayfulPreview />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Playful →</span>
+                  </div>
+                </div>
+              </Link>
+              {/* Bold — col 3, row 1 */}
+              <Link href="/showcase/bold"
+                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-full h-full relative">
+                  <BoldPreview />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Bold & Dark →</span>
+                  </div>
+                </div>
+              </Link>
+              {/* Professional — col 2, row 2 */}
+              <Link href="/showcase/professional"
+                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-full h-full relative">
+                  <ProfessionalPreview />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Professional →</span>
+                  </div>
+                </div>
+              </Link>
+              {/* E-Commerce — col 3, row 2 */}
+              <Link href="/showcase/ecommerce"
+                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="w-full h-full relative">
+                  <EcommercePreview />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">E-Commerce →</span>
+                  </div>
+                </div>
+              </Link>
             </motion.div>
 
           </div>
@@ -289,7 +323,7 @@ export default function HomePage() {
       </section>
 
       {/* ── MARQUEE ── */}
-      <div className="relative z-10 bg-white -mt-3 rounded-t-[2rem] overflow-hidden border-b border-black/[0.06] shadow-[0_-12px_40px_rgba(0,0,0,0.08)]">
+      <div className="relative z-10 bg-[#f5f2ec] -mt-3 rounded-t-[2rem] overflow-hidden border-b border-black/[0.07] shadow-[0_-12px_40px_rgba(0,0,0,0.10)]">
         <div className="py-4 overflow-hidden">
           <div className="animate-marquee">
             {[...marqueeItems,...marqueeItems].map((item,i)=>(
@@ -302,7 +336,7 @@ export default function HomePage() {
       </div>
 
       {/* ── SHOWCASE GRID ── */}
-      <section id="showcase" className="bg-white py-24 px-6">
+      <section id="showcase" className="bg-white py-24 px-6 border-t border-black/[0.05]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">Design Showcase</motion.p>
@@ -402,7 +436,7 @@ export default function HomePage() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section className="relative z-10 bg-[#f5f4f2] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <section className="relative z-10 bg-[#ece7de] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.07)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">What I Build</motion.p>
@@ -470,7 +504,7 @@ export default function HomePage() {
       </section>
 
       {/* ── PROCESS ── */}
-      <section className="relative z-10 bg-[#faf9f7] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
+      <section className="relative z-10 bg-[#f7f3ee] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">How It Works</motion.p>
