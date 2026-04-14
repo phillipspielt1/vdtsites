@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -10,24 +11,37 @@ const fadeUp = {
 };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
 
+// Web3Forms' public hCaptcha site key — works with all Web3Forms accounts
+const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+
 type Status = "idle" | "sending" | "success" | "error";
 
 export default function ContactPage() {
-  const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [status, setStatus]         = useState<Status>("idle");
+  const [errorMsg, setErrorMsg]     = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
 
   async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!captchaToken) {
+      setErrorMsg("Please complete the captcha first.");
+      setStatus("error");
+      return;
+    }
+
     setStatus("sending");
     setErrorMsg("");
 
     const form = e.currentTarget;
     const data = {
-      name:     (form.elements.namedItem("name")     as HTMLInputElement).value,
-      email:    (form.elements.namedItem("email")    as HTMLInputElement).value,
-      business: (form.elements.namedItem("business") as HTMLInputElement).value,
-      type:     (form.elements.namedItem("type")     as HTMLSelectElement).value,
-      message:  (form.elements.namedItem("message")  as HTMLTextAreaElement).value,
+      name:         (form.elements.namedItem("name")     as HTMLInputElement).value,
+      email:        (form.elements.namedItem("email")    as HTMLInputElement).value,
+      business:     (form.elements.namedItem("business") as HTMLInputElement).value,
+      type:         (form.elements.namedItem("type")     as HTMLSelectElement).value,
+      message:      (form.elements.namedItem("message")  as HTMLTextAreaElement).value,
+      captchaToken,
     };
 
     try {
@@ -39,14 +53,20 @@ export default function ContactPage() {
       if (res.ok) {
         setStatus("success");
         form.reset();
+        setCaptchaToken(null);
+        captchaRef.current?.resetCaptcha();
       } else {
         const json = await res.json();
         setErrorMsg(json.error || "Something went wrong.");
         setStatus("error");
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
       }
     } catch {
       setErrorMsg("Network error. Please try again.");
       setStatus("error");
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     }
   }
 
@@ -150,6 +170,16 @@ export default function ContactPage() {
                     />
                   </div>
 
+                  {/* hCaptcha */}
+                  <div>
+                    <HCaptcha
+                      sitekey={HCAPTCHA_SITE_KEY}
+                      onVerify={(token) => { setCaptchaToken(token); setStatus("idle"); setErrorMsg(""); }}
+                      onExpire={() => setCaptchaToken(null)}
+                      ref={captchaRef}
+                    />
+                  </div>
+
                   {status === "error" && (
                     <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl">
                       <AlertCircle size={15} />
@@ -159,8 +189,8 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    disabled={status === "sending"}
-                    className="w-full bg-[#1d1d1f] text-white text-sm font-medium py-3.5 rounded-xl hover:bg-[#3d3d3f] transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                    disabled={status === "sending" || !captchaToken}
+                    className="w-full bg-[#1d1d1f] text-white text-sm font-medium py-3.5 rounded-xl hover:bg-[#3d3d3f] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {status === "sending" ? (
                       <><Loader2 size={15} className="animate-spin" /> Sending...</>

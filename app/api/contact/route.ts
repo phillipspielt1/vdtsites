@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { name, email, business, type, message } = await req.json();
+  const { name, email, business, type, message, captchaToken } = await req.json();
 
   if (!name || !email || !message) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+  }
+
+  if (!captchaToken) {
+    return NextResponse.json({ error: "Please complete the captcha." }, { status: 400 });
   }
 
   if (!process.env.WEB3FORMS_KEY) {
@@ -23,6 +27,7 @@ export async function POST(req: Request) {
       business: business || "—",
       "project type": type || "—",
       message,
+      "h-captcha-response": captchaToken,
     }),
   });
 
