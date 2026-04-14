@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, Home } from "lucide-react";
 import { useState } from "react";
 
 const showcases = [
@@ -14,53 +14,65 @@ const showcases = [
 ];
 
 export default function ShowcaseNav() {
-  const [open, setOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <>
-      {/* ── Site nav strip — sits above the showcase's own header ── */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-10 bg-white/95 backdrop-blur-md border-b border-black/[0.08] flex items-center justify-between px-6 shadow-sm">
-        {/* Logo / home */}
-        <Link href="/" className="flex flex-col leading-none group">
-          <span className="text-[11px] font-semibold tracking-tight text-[#1a1a1a] group-hover:text-black transition-colors">Phillip Treitel</span>
-          <span className="text-[7px] tracking-[0.2em] text-[#999] uppercase font-medium">Web Design</span>
-        </Link>
+      {/* ── Site nav — identical styling to main Nav ── */}
+      <nav className="fixed top-0 left-0 right-0 z-[60] border-b bg-white/90 backdrop-blur-xl border-black/[0.07]">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-        {/* Centered nav links */}
-        <div className="hidden sm:flex items-center gap-6 text-[11px] text-[#666] absolute left-1/2 -translate-x-1/2">
-          <Link href="/" className="hover:text-[#1a1a1a] transition-colors">Home</Link>
+          {/* Wordmark */}
+          <Link href="/" className="flex flex-col leading-none group">
+            <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a] group-hover:text-black transition-colors">
+              Phillip Treitel
+            </span>
+            <span className="text-[9px] tracking-[0.22em] text-[#999] uppercase font-medium mt-[2px]">
+              Web Design
+            </span>
+          </Link>
 
-          {/* Showcase dropdown */}
-          <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-            <button className="flex items-center gap-0.5 hover:text-[#1a1a1a] transition-colors">
-              Showcase <ChevronDown size={10} className="mt-px"/>
-            </button>
-            {open && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
-                <div className="bg-white rounded-xl shadow-xl border border-black/[0.08] py-1.5 min-w-[180px]">
-                  {showcases.map(s => (
-                    <Link key={s.href} href={s.href}
-                      className="block px-4 py-2 text-[12px] text-[#1a1a1a] hover:bg-[#f5f5f7] transition-colors">
-                      {s.label}
-                    </Link>
-                  ))}
+          {/* Centered nav links */}
+          <div className="hidden md:flex items-center gap-8 text-[13px] text-[#6e6e73]">
+            <Link href="/" className="hover:text-[#1a1a1a] transition-colors">
+              Home
+            </Link>
+            <div className="relative" onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
+              <button className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#1a1a1a] transition-colors">
+                Showcase
+                <svg className="w-3 h-3 mt-px" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </button>
+              {dropdownOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
+                  <div className="bg-white rounded-2xl shadow-xl border border-black/[0.08] py-2 min-w-[190px]">
+                    {showcases.map(s => (
+                      <Link key={s.href} href={s.href}
+                        className="block px-5 py-2.5 text-[13px] text-[#1a1a1a] hover:bg-[#f5f5f7] transition-colors">
+                        {s.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+            <Link href="/contact" className="hover:text-[#1a1a1a] transition-colors">
+              Contact
+            </Link>
           </div>
 
-          <Link href="/contact" className="hover:text-[#1a1a1a] transition-colors">Contact</Link>
+          {/* CTA */}
+          <Link href="/contact"
+            className="hidden md:inline-flex items-center gap-1.5 text-[13px] font-medium bg-[#1a1a1a] text-white px-5 py-2.5 rounded-full hover:bg-black transition-colors">
+            Want this style? <ArrowRight size={13}/>
+          </Link>
+
         </div>
+      </nav>
 
-        {/* Right: CTA */}
-        <Link href="/contact"
-          className="flex items-center gap-1 bg-[#1a1a1a] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full hover:bg-black transition-colors">
-          Want this style? <ArrowRight size={9}/>
-        </Link>
-      </div>
-
-      {/* Spacer — pushes page content below the fixed strip */}
-      <div className="h-10" />
+      {/* Spacer — same height as nav so content starts below it */}
+      <div className="h-16" />
 
       {/* Floating home pill — bottom left */}
       <Link
