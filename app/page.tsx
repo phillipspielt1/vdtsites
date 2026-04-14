@@ -122,6 +122,45 @@ function BoldPreview() {
   );
 }
 
+function TradesPreview() {
+  return (
+    <div className="w-full h-full bg-white overflow-hidden flex flex-col">
+      <div className="bg-[#f97316] text-white text-[4px] text-center py-0.5 flex-shrink-0 font-bold tracking-wider uppercase">
+        24/7 Emergency Service
+      </div>
+      <div className="flex justify-between items-center px-3 py-1.5 bg-[#1e3a5f] flex-shrink-0">
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 bg-[#f97316] rounded flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-[5px] font-bold">⚙</span>
+          </div>
+          <span className="text-[5px] font-bold text-white">Peak Home Services</span>
+        </div>
+        <div className="bg-[#f97316] text-white text-[4px] font-bold px-1.5 py-0.5 rounded">Get a Quote</div>
+      </div>
+      <div className="flex-1 relative overflow-hidden min-h-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="https://picsum.photos/seed/trades-hero-main/400/300" alt="" className="w-full h-full object-cover" style={{filter:"brightness(0.38)"}} />
+        <div className="absolute inset-0 flex flex-col justify-center p-3">
+          <div className="text-[8px] font-bold text-white leading-tight">Fast, Reliable<br/>Home Services</div>
+          <div className="text-[3.5px] text-white/60 mt-1">Nanaimo, BC · Licensed & Insured</div>
+          <div className="mt-2 flex gap-1">
+            <div className="bg-[#f97316] text-white text-[3.5px] font-bold px-2 py-0.5 rounded">Free Quote</div>
+            <div className="border border-white/60 text-white text-[3.5px] px-2 py-0.5 rounded">Call Now</div>
+          </div>
+        </div>
+      </div>
+      <div className="flex-shrink-0 flex border-t border-gray-100 bg-white">
+        {[["🔧","Plumbing"],["❄️","HVAC"],["⚡","Electric"],["🚰","Drains"]].map(([icon,label])=>(
+          <div key={label} className="flex-1 text-center py-1.5 border-r border-gray-100 last:border-0">
+            <div className="text-[7px]">{icon}</div>
+            <div className="text-[3px] text-gray-500 font-medium">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function EcommercePreview() {
   return (
     <div className="w-full h-full bg-[#faf7f2] overflow-hidden flex flex-col">
@@ -166,6 +205,7 @@ const showcases = [
   { href: "/showcase/professional", label: "Professional",   tag: "Finance · Consulting",      description: "Structured, trustworthy, polished. Authority in every pixel.", Preview: ProfessionalPreview },
   { href: "/showcase/bold",         label: "Bold & Dark",    tag: "Events · Luxury",           description: "Cinematic and dramatic. For brands that leave a lasting mark.", Preview: BoldPreview },
   { href: "/showcase/ecommerce",    label: "E-Commerce",     tag: "Retail · Artisan Goods",    description: "Warm, story-driven, and built to convert. Products showcased beautifully.", Preview: EcommercePreview },
+  { href: "/showcase/trades",       label: "Trades & Services", tag: "Home Services · Local Business", description: "Conversion-first for local trades. Built to get calls, quotes, and bookings.", Preview: TradesPreview },
 ];
 
 const pricingTiers = [
@@ -198,7 +238,7 @@ const services = [
   { icon: Layers,      label: "Custom Builds",         desc: "Got something unique in mind? Let's figure it out together." },
 ];
 
-const marqueeItems = ["Minimal","Playful","Professional","Bold & Dark","E-Commerce","Responsive","Fast","Modern","Custom","Clean","Strategic"];
+const marqueeItems = ["Minimal","Playful","Professional","Bold & Dark","E-Commerce","Trades & Services","Responsive","Fast","Modern","Custom","Clean","Strategic"];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -258,64 +298,27 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right: Asymmetric 3-col preview collage */}
+            {/* Right: Symmetric 3×2 preview grid */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:grid grid-cols-3 gap-3"
-              style={{ gridTemplateRows: "155px 155px" }}
+              className="hidden lg:grid grid-cols-3 gap-2.5"
+              style={{ gridTemplateRows: "138px 138px" }}
             >
-              {/* Minimal — tall, spans both rows */}
-              <Link href="/showcase/minimal"
-                className="row-span-2 group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-full h-full relative">
-                  <MinimalPreview />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Minimal →</span>
+              {showcases.map((s) => (
+                <Link key={s.href} href={s.href}
+                  className="group rounded-xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-full h-full relative">
+                    <s.Preview />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                      <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">
+                        {s.label} →
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              {/* Playful — col 2, row 1 */}
-              <Link href="/showcase/playful"
-                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-full h-full relative">
-                  <PlayfulPreview />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Playful →</span>
-                  </div>
-                </div>
-              </Link>
-              {/* Bold — col 3, row 1 */}
-              <Link href="/showcase/bold"
-                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-full h-full relative">
-                  <BoldPreview />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Bold & Dark →</span>
-                  </div>
-                </div>
-              </Link>
-              {/* Professional — col 2, row 2 */}
-              <Link href="/showcase/professional"
-                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-full h-full relative">
-                  <ProfessionalPreview />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">Professional →</span>
-                  </div>
-                </div>
-              </Link>
-              {/* E-Commerce — col 3, row 2 */}
-              <Link href="/showcase/ecommerce"
-                className="group rounded-2xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="w-full h-full relative">
-                  <EcommercePreview />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                    <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">E-Commerce →</span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              ))}
             </motion.div>
 
           </div>

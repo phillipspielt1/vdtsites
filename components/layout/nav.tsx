@@ -6,11 +6,12 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const showcases = [
-  { href: "/showcase/minimal", label: "Minimal" },
-  { href: "/showcase/playful", label: "Playful" },
+  { href: "/showcase/minimal",      label: "Minimal" },
+  { href: "/showcase/playful",      label: "Playful" },
   { href: "/showcase/professional", label: "Professional" },
-  { href: "/showcase/bold", label: "Bold & Dark" },
-  { href: "/showcase/ecommerce", label: "E-Commerce" },
+  { href: "/showcase/bold",         label: "Bold & Dark" },
+  { href: "/showcase/ecommerce",    label: "E-Commerce" },
+  { href: "/showcase/trades",       label: "Trades & Services" },
 ];
 
 export default function Nav() {
