@@ -17,9 +17,12 @@ export async function POST(req: Request) {
 
   const res = await fetch("https://api.web3forms.com/submit", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "User-Agent": "PTDesigns-ContactForm/1.0",
+    },
     body: JSON.stringify({
-      access_key: process.env.WEB3FORMS_KEY,
+      access_key: process.env.WEB3FORMS_KEY?.trim(),
       subject: `New enquiry from ${name}${business ? ` — ${business}` : ""}`,
       from_name: "PT Designs Contact Form",
       name,
