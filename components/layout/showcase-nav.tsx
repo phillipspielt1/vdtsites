@@ -80,6 +80,7 @@ export default function ShowcaseNav() {
 
           {/* CTA */}
           <Link href={contactHref}
+            onMouseEnter={() => setDropdownOpen(false)}
             className="hidden md:inline-flex items-center gap-1.5 text-[13px] font-medium bg-[#1a1a1a] text-white px-5 py-2.5 rounded-full hover:bg-black transition-colors">
             Want this style? <ArrowRight size={13}/>
           </Link>

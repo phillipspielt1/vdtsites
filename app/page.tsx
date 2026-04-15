@@ -462,7 +462,7 @@ export default function HomePage() {
       </section>
 
       {/* ── LOCAL & HONEST ── */}
-      <section className="relative z-10 bg-white py-20 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+      <section className="relative z-10 bg-[#f5f4f1] py-20 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
             className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center">
@@ -497,7 +497,7 @@ export default function HomePage() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section className="relative z-10 bg-white py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+      <section className="relative z-10 bg-white py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.09)]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">About Us</motion.p>
@@ -567,7 +567,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="relative z-10 bg-white py-32 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.04)]">
+      <section className="relative z-10 bg-white py-32 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
             <motion.h2 variants={fadeUp} className="text-4xl md:text-[3.5rem] font-semibold text-[#1a1a1a] tracking-tight">
