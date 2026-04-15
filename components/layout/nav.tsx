@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const showcases = [
@@ -19,18 +19,14 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleDropdownEnter = () => {
-    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
-    dropdownTimer.current = setTimeout(() => setDropdownOpen(true), 200);
-  };
-  const handleDropdownLeave = () => {
-    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
-    setDropdownOpen(false);
-  };
 
   const isShowcase = pathname.startsWith("/showcase");
+
+  // Close dropdown on every route change
+  useEffect(() => {
+    setDropdownOpen(false);
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -59,7 +55,7 @@ export default function Nav() {
           <Link href="/" className={`hover:text-[#1a1a1a] transition-colors ${pathname === "/" ? "text-[#1a1a1a]" : ""}`}>
             Home
           </Link>
-          <div className="relative" onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}>
+          <div className="relative" onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
             <button className={`flex items-center gap-1 hover:text-[#1a1a1a] transition-colors ${isShowcase ? "text-[#1a1a1a]" : ""}`}>
               Showcase
               <svg className="w-3 h-3 mt-px" viewBox="0 0 12 12" fill="none">
