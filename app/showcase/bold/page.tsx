@@ -17,9 +17,9 @@ const fade = {
 const stagger = { hidden:{}, show:{ transition:{ staggerChildren:0.15 } } };
 
 const events = [
-  { name:"The Obsidian Gala", type:"Corporate",     guests:"320", season:"Spring 2025", seed:"onyx-ev1" },
-  { name:"Velvet Evenings",   type:"Private Dinner", guests:"40",  season:"Summer 2025", seed:"onyx-ev2" },
-  { name:"Noir Collective",   type:"Cultural",      guests:"180", season:"Autumn 2025", seed:"onyx-ev3" },
+  { name:"The Obsidian Gala", type:"Corporate",     guests:"320", season:"Spring 2025", img:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=700&q=80" },
+  { name:"Velvet Evenings",   type:"Private Dinner", guests:"40",  season:"Summer 2025", img:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80" },
+  { name:"Noir Collective",   type:"Cultural",      guests:"180", season:"Autumn 2025", img:"https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=700&q=80" },
 ];
 
 export default function BoldShowcase() {
@@ -50,7 +50,7 @@ export default function BoldShowcase() {
       {/* ── Full-screen editorial hero ── */}
       <section className="relative h-screen overflow-hidden">
         <Image
-          src="https://picsum.photos/seed/onyx-hero-main/1800/1200"
+          src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1800&q=80"
           alt="Onyx Events"
           fill
           className="object-cover object-center brightness-50"
@@ -127,7 +127,7 @@ export default function BoldShowcase() {
 
       {/* ── Full-bleed divider ── */}
       <div className="relative h-[55vw] max-h-[700px] overflow-hidden">
-        <Image src="https://picsum.photos/seed/onyx-wide/1800/900" alt="" fill className="object-cover brightness-60" unoptimized/>
+        <Image src="https://images.unsplash.com/photo-1510076857177-7470076d4098?w=1800&q=80" alt="" fill className="object-cover brightness-60" unoptimized/>
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-[#0a0a0a] opacity-60"/>
         <div className="absolute inset-0 flex items-center justify-center">
           <blockquote className="text-center max-w-2xl px-8">
@@ -154,7 +154,7 @@ export default function BoldShowcase() {
             {events.map((e) => (
               <motion.div key={e.name} variants={fade} className="group cursor-pointer">
                 <div className="relative h-72 overflow-hidden">
-                  <Image src={`https://picsum.photos/seed/${e.seed}/700/800`} alt={e.name} fill
+                  <Image src={e.img} alt={e.name} fill
                     className="object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-700"
                     unoptimized/>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent"/>
@@ -199,7 +199,7 @@ export default function BoldShowcase() {
 
       {/* ── Full-bleed closing image ── */}
       <section className="relative h-[70vh] overflow-hidden">
-        <Image src="https://picsum.photos/seed/onyx-close/1800/1000" alt="" fill className="object-cover brightness-40" unoptimized/>
+        <Image src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1800&q=80" alt="" fill className="object-cover brightness-40" unoptimized/>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 mb-6 font-light">We accept a limited number of commissions per year</p>
           <h2 className="text-4xl md:text-6xl font-light text-white mb-10">Begin the conversation.</h2>

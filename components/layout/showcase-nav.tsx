@@ -21,6 +21,7 @@ export default function ShowcaseNav() {
   // e.g. "/showcase/playful" → "playful"
   const styleSlug = pathname.startsWith("/showcase/") ? pathname.split("/showcase/")[1] : "";
   const contactHref = styleSlug ? `/contact?style=${styleSlug}` : "/contact";
+  const activeShowcase = showcases.find(s => s.href === pathname) ?? null;
 
   return (
     <>
@@ -44,8 +45,13 @@ export default function ShowcaseNav() {
               Home
             </Link>
             <div className="relative" onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
-              <button className="flex items-center gap-1 text-[#1a1a1a] hover:text-[#1a1a1a] transition-colors">
-                Showcase
+              <button className="flex items-center gap-1.5 text-[#1a1a1a] hover:text-[#1a1a1a] transition-colors">
+                {activeShowcase ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] inline-block flex-shrink-0" />
+                    {activeShowcase.label}
+                  </>
+                ) : "Showcase"}
                 <svg className="w-3 h-3 mt-px" viewBox="0 0 12 12" fill="none">
                   <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
@@ -53,12 +59,16 @@ export default function ShowcaseNav() {
               {dropdownOpen && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3">
                   <div className="bg-white rounded-2xl shadow-xl border border-black/[0.08] py-2 min-w-[190px]">
-                    {showcases.map(s => (
-                      <Link key={s.href} href={s.href}
-                        className="block px-5 py-2.5 text-[13px] text-[#1a1a1a] hover:bg-[#f5f5f7] transition-colors">
-                        {s.label}
-                      </Link>
-                    ))}
+                    {showcases.map(s => {
+                      const isActive = s.href === pathname;
+                      return (
+                        <Link key={s.href} href={s.href}
+                          className={`flex items-center justify-between px-5 py-2.5 text-[13px] hover:bg-[#f5f5f7] transition-colors ${isActive ? "font-semibold text-[#1a1a1a]" : "text-[#1a1a1a]"}`}>
+                          {s.label}
+                          {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a] flex-shrink-0" />}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               )}

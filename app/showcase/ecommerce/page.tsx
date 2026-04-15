@@ -17,31 +17,31 @@ const fade = {
 const stagger = { hidden:{}, show:{ transition:{ staggerChildren:0.1 } } };
 
 const products = [
-  { name:"Cedarmoss Throw",      price:"$89",  originalPrice:null,  seed:"cedar-p1", badge:"Bestseller", desc:"Hand-loomed from recycled cotton, 140×180cm" },
-  { name:"Old-Growth Soap",      price:"$18",  originalPrice:null,  seed:"cedar-p2", badge:"New",        desc:"Cedar, Douglas fir & sea salt. 120g bar" },
-  { name:"Beeswax Taper Set",    price:"$42",  originalPrice:"$52", seed:"cedar-p3", badge:"Sale",       desc:"6 tapers, hand-dipped in pure BC beeswax" },
-  { name:"Linen Market Tote",    price:"$35",  originalPrice:null,  seed:"cedar-p4", badge:null,        desc:"Undyed Belgian linen, reinforced handles" },
-  { name:"Forest Incense Kit",   price:"$28",  originalPrice:null,  seed:"cedar-p5", badge:"New",        desc:"30 sticks of pine, cedar & sage. Includes holder" },
-  { name:"Hand & Body Cream",    price:"$32",  originalPrice:null,  seed:"cedar-p6", badge:null,        desc:"Shea, beeswax & wild rose hip. 200ml" },
+  { name:"Cedarmoss Throw",    price:"$89",  originalPrice:null,  img:"https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=500&q=80", badge:"Bestseller", desc:"Hand-loomed from recycled cotton, 140×180cm" },
+  { name:"Old-Growth Soap",    price:"$18",  originalPrice:null,  img:"https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=500&q=80", badge:"New",        desc:"Cedar, Douglas fir & sea salt. 120g bar" },
+  { name:"Beeswax Taper Set",  price:"$42",  originalPrice:"$52", img:"https://images.unsplash.com/photo-1603006905003-be475563bc59?w=500&q=80", badge:"Sale",       desc:"6 tapers, hand-dipped in pure BC beeswax" },
+  { name:"Linen Market Tote",  price:"$35",  originalPrice:null,  img:"https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&q=80", badge:null,         desc:"Undyed Belgian linen, reinforced handles" },
+  { name:"Forest Incense Kit", price:"$28",  originalPrice:null,  img:"https://images.unsplash.com/photo-1545231027-637d2f6210f8?w=500&q=80", badge:"New",         desc:"30 sticks of pine, cedar & sage. Includes holder" },
+  { name:"Hand & Body Cream",  price:"$32",  originalPrice:null,  img:"https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=500&q=80", badge:null,        desc:"Shea, beeswax & wild rose hip. 200ml" },
 ];
 
 const stories = [
   {
     title:"Where we start:\nthe forest.",
     body:"Every Cedar & Co. product begins with the forest. We source our raw materials from sustainable BC forestry operations, working directly with small-scale harvesters who share our values.",
-    seed:"cedar-story1",
+    img:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=700&q=80",
     imgLeft:true,
   },
   {
     title:"Made by hand,\none at a time.",
     body:"Our Tofino studio produces everything in small batches. No assembly lines, no shortcuts. Each item is made by one of our nine makers — people who care deeply about what they make.",
-    seed:"cedar-story2",
+    img:"https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=700&q=80",
     imgLeft:false,
   },
   {
     title:"Packaged to\nlast a lifetime.",
     body:"Our packaging is 100% recyclable or compostable. We use soy-based inks, recycled paper, and avoid single-use plastic entirely. The box is part of the experience — and it goes back to the earth.",
-    seed:"cedar-story3",
+    img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=700&q=80",
     imgLeft:true,
   },
 ];
@@ -119,7 +119,7 @@ export default function EcommerceShowcase() {
           <motion.div initial={{ opacity:0, x:24 }} animate={{ opacity:1, x:0 }} transition={{ duration:0.9 }}
             className="relative">
             <div className="relative h-[480px] rounded-2xl overflow-hidden">
-              <Image src="https://picsum.photos/seed/cedar-main-hero/700/900" alt="Cedar & Co." fill className="object-cover" unoptimized priority/>
+              <Image src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=700&q=80" alt="Cedar & Co." fill className="object-cover" unoptimized priority/>
             </div>
             {/* Floating award badge */}
             <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-xl border border-[#e8ddd0]">
@@ -158,7 +158,7 @@ export default function EcommerceShowcase() {
               >
                 <div className="relative rounded-xl overflow-hidden mb-3">
                   <div className="relative" style={{paddingBottom:"120%"}}>
-                    <Image src={`https://picsum.photos/seed/${p.seed}/500/600`} alt={p.name} fill
+                    <Image src={p.img} alt={p.name} fill
                       className="object-cover group-hover:scale-[1.04] transition-transform duration-600"
                       unoptimized/>
                   </div>
@@ -208,7 +208,7 @@ export default function EcommerceShowcase() {
                 className={`grid grid-cols-1 md:grid-cols-2 gap-16 items-center ${!s.imgLeft ? "md:[&>:first-child]:order-2" : ""}`}
               >
                 <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden">
-                  <Image src={`https://picsum.photos/seed/${s.seed}/700/600`} alt={s.title} fill className="object-cover" unoptimized/>
+                  <Image src={s.img} alt={s.title} fill className="object-cover" unoptimized/>
                 </div>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-semibold text-[#3d2c1e] leading-tight mb-5 whitespace-pre-line"

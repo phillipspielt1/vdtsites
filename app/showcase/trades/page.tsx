@@ -103,7 +103,7 @@ export default function TradesShowcase() {
       {/* ── Hero ── */}
       <section className="relative min-h-[88vh] flex items-center overflow-hidden">
         <Image
-          src="https://picsum.photos/seed/trades-hero-main/1800/1000"
+          src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1800&q=80"
           alt="Technician at work"
           fill
           className="object-cover"
@@ -318,7 +318,7 @@ export default function TradesShowcase() {
             initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}
             className="relative h-80 md:h-[420px] rounded-xl overflow-hidden shadow-xl">
-            <Image src="https://picsum.photos/seed/trades-about-team/800/600" alt="Our team" fill className="object-cover" unoptimized />
+            <Image src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80" alt="Our team" fill className="object-cover" unoptimized />
             <div className="absolute bottom-5 left-5 bg-white rounded-lg px-4 py-3 shadow-md">
               <div className="text-2xl font-bold text-[#1e3a5f]">16+</div>
               <div className="text-xs text-[#6b7280]">Years in Business</div>
@@ -363,7 +363,7 @@ export default function TradesShowcase() {
             </div>
           </div>
           <div className="relative h-60 md:h-72 rounded-xl overflow-hidden">
-            <Image src="https://picsum.photos/seed/trades-island-map/800/500" alt="Service area" fill className="object-cover opacity-50" unoptimized />
+            <Image src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80" alt="Service area" fill className="object-cover opacity-50" unoptimized />
             <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/40 to-transparent" />
           </div>
         </div>

@@ -39,15 +39,21 @@ const services = [
 ];
 
 const articles = [
-  { title:"Rate Rises and Your Portfolio: What to Do in 2025", date:"March 2025", cat:"Market Insights", seed:"finance-art1" },
-  { title:"When to Review Your Life Insurance Coverage", date:"February 2025", cat:"Planning", seed:"finance-art2" },
-  { title:"Succession Planning: Starting the Conversation Early", date:"January 2025", cat:"Business", seed:"finance-art3" },
+  { title:"Rate Rises and Your Portfolio: What to Do in 2025", date:"March 2025", cat:"Market Insights", img:"https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&q=80" },
+  { title:"When to Review Your Life Insurance Coverage", date:"February 2025", cat:"Planning", img:"https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=500&q=80" },
+  { title:"Succession Planning: Starting the Conversation Early", date:"January 2025", cat:"Business", img:"https://images.unsplash.com/photo-1553877522-43269d4ea984?w=500&q=80" },
 ];
 
 const team = [
-  { name:"David Harbour", role:"Managing Director, CFP®", bio:"22 years guiding high-net-worth families and business owners through every stage of their financial journey.", seed:"prof-team1" },
-  { name:"Lena Reeves", role:"Senior Financial Advisor", bio:"Specialises in retirement income planning and tax-efficient investment strategies for pre-retirees.", seed:"prof-team2" },
-  { name:"Marcus Chen", role:"Portfolio Analyst, CFA®", bio:"Quantitative portfolio construction with a focus on risk-adjusted returns across all market cycles.", seed:"prof-team3" },
+  { name:"David Harbour", role:"Managing Director, CFP®", bio:"22 years guiding high-net-worth families and business owners through every stage of their financial journey.", img:"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" },
+  { name:"Lena Reeves", role:"Senior Financial Advisor", bio:"Specialises in retirement income planning and tax-efficient investment strategies for pre-retirees.", img:"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80" },
+  { name:"Marcus Chen", role:"Portfolio Analyst, CFA®", bio:"Quantitative portfolio construction with a focus on risk-adjusted returns across all market cycles.", img:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80" },
+];
+
+const avatars = [
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=50&q=80",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&q=80",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&q=80",
 ];
 
 export default function ProfessionalShowcase() {
@@ -86,9 +92,9 @@ export default function ProfessionalShowcase() {
           <motion.div initial="hidden" animate="show" variants={stagger}>
             <motion.div variants={fade} className="flex items-center gap-2 mb-6">
               <div className="flex -space-x-2">
-                {["prof-av1","prof-av2","prof-av3"].map(s=>(
-                  <div key={s} className="w-7 h-7 rounded-full border-2 border-white overflow-hidden relative">
-                    <Image src={`https://picsum.photos/seed/${s}/50/50`} alt="" fill className="object-cover" unoptimized/>
+                {avatars.map((src,i)=>(
+                  <div key={i} className="w-7 h-7 rounded-full border-2 border-white overflow-hidden relative">
+                    <Image src={src} alt="" fill className="object-cover object-top" unoptimized/>
                   </div>
                 ))}
               </div>
@@ -119,7 +125,7 @@ export default function ProfessionalShowcase() {
           </motion.div>
           <motion.div initial={{ opacity:0, x:20 }} animate={{ opacity:1, x:0 }} transition={{ duration:0.8, delay:0.2 }}
             className="relative h-[420px] rounded-2xl overflow-hidden shadow-2xl">
-            <Image src="https://picsum.photos/seed/harbour-hero/700/900" alt="Harbour Advisory" fill className="object-cover" unoptimized priority/>
+            <Image src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=700&q=80" alt="Harbour Advisory" fill className="object-cover" unoptimized priority/>
             <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a8a]/60 to-transparent flex items-end p-8">
               <div>
                 <div className="text-white text-sm font-medium">Independent · Fee-Based · Fiduciary</div>
@@ -183,7 +189,7 @@ export default function ProfessionalShowcase() {
             {team.map((m) => (
               <div key={m.name} className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
                 <div className="relative h-52">
-                  <Image src={`https://picsum.photos/seed/${m.seed}/400/350`} alt={m.name} fill className="object-cover object-top" unoptimized/>
+                  <Image src={m.img} alt={m.name} fill className="object-cover object-top" unoptimized/>
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-gray-900">{m.name}</h3>
@@ -207,7 +213,7 @@ export default function ProfessionalShowcase() {
           </blockquote>
           <div className="mt-8 flex items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full overflow-hidden relative">
-              <Image src="https://picsum.photos/seed/testimonial-prof/80/80" alt="" fill className="object-cover" unoptimized/>
+              <Image src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=80&q=80" alt="" fill className="object-cover" unoptimized/>
             </div>
             <div className="text-left">
               <div className="text-sm font-semibold text-gray-900">Robert & Claire M.</div>
@@ -222,7 +228,7 @@ export default function ProfessionalShowcase() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <p className="text-xs font-semibold tracking-widest uppercase text-[#1e3a8a] mb-2">Insights</p>
+              <p className="text-xs font-semibold tracking-widests uppercase text-[#1e3a8a] mb-2">Insights</p>
               <h2 className="text-3xl font-bold text-gray-900">From our advisors.</h2>
             </div>
             <a href="#" className="text-sm font-semibold text-[#1e3a8a] hover:underline">View all articles</a>
@@ -231,7 +237,7 @@ export default function ProfessionalShowcase() {
             {articles.map((a) => (
               <div key={a.title} className="bg-white rounded-xl overflow-hidden border border-gray-100 group cursor-pointer hover:shadow-md transition-shadow">
                 <div className="relative h-44">
-                  <Image src={`https://picsum.photos/seed/${a.seed}/500/350`} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized/>
+                  <Image src={a.img} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized/>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-3">

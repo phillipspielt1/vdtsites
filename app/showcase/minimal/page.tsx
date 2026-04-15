@@ -15,12 +15,12 @@ const fade = {
 const stagger = { hidden:{}, show:{ transition:{ staggerChildren:0.12 } } };
 
 const works = [
-  { title:"Coastal Light", cat:"Landscape", seed:"mara-coast", w:2, h:3 },
-  { title:"Morning Study", cat:"Portrait",  seed:"mara-port1", w:3, h:2 },
-  { title:"Still Life III", cat:"Editorial", seed:"mara-still", w:1, h:1 },
-  { title:"Open Road",     cat:"Travel",    seed:"mara-road",  w:3, h:2 },
-  { title:"Form Study",    cat:"Fine Art",  seed:"mara-form",  w:2, h:3 },
-  { title:"Untitled No.7", cat:"Abstract",  seed:"mara-abs7",  w:1, h:1 },
+  { title:"Coastal Light", cat:"Landscape", img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", w:2, h:3 },
+  { title:"Morning Study", cat:"Portrait",  img:"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80", w:3, h:2 },
+  { title:"Still Life III", cat:"Editorial", img:"https://images.unsplash.com/photo-1497290756760-23ac55edf36f?w=800&q=80", w:1, h:1 },
+  { title:"Open Road",     cat:"Travel",    img:"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80", w:3, h:2 },
+  { title:"Form Study",    cat:"Fine Art",  img:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80", w:2, h:3 },
+  { title:"Untitled No.7", cat:"Abstract",  img:"https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80", w:1, h:1 },
 ];
 
 export default function MinimalShowcase() {
@@ -44,7 +44,7 @@ export default function MinimalShowcase() {
       {/* ── Full-screen hero ── */}
       <section className="relative h-screen overflow-hidden">
         <Image
-          src="https://picsum.photos/seed/mara-hero-main/1800/1200"
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80"
           alt="Hero"
           fill
           className="object-cover object-center"
@@ -94,7 +94,7 @@ export default function MinimalShowcase() {
               Guided by light,<br/>drawn to quiet moments.
             </h2>
             <p className="text-base text-[#666] leading-loose mb-6">
-              Mara Chen has spent over a decade documenting the world through a careful and patient lens. Her work explores the relationship between light, form, and the spaces in between — producing images that linger long after you've looked away.
+              Mara Chen has spent over a decade documenting the world through a careful and patient lens. Her work explores the relationship between light, form, and the spaces in between — producing images that linger long after you&apos;ve looked away.
             </p>
             <p className="text-base text-[#666] leading-loose">
               Her editorial work has appeared in publications across North America and Europe, including Kinfolk, The New York Times, and National Geographic Traveller.
@@ -108,7 +108,7 @@ export default function MinimalShowcase() {
 
       {/* ── Full-bleed divider image ── */}
       <div className="relative h-[50vw] max-h-[600px] overflow-hidden">
-        <Image src="https://picsum.photos/seed/mara-wide/1800/800" alt="" fill className="object-cover" unoptimized/>
+        <Image src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1800&q=80" alt="" fill className="object-cover" unoptimized/>
       </div>
 
       {/* ── Selected Work ── */}
@@ -135,7 +135,7 @@ export default function MinimalShowcase() {
               style={{ aspectRatio: i===0||i===4 ? "2/3" : "3/2" }}
             >
               <Image
-                src={`https://picsum.photos/seed/${w.seed}/800/800`}
+                src={w.img}
                 alt={w.title}
                 fill
                 className="object-cover group-hover:scale-[1.04] transition-transform duration-700"
@@ -203,7 +203,7 @@ export default function MinimalShowcase() {
             </a>
           </div>
           <div className="relative h-72 overflow-hidden">
-            <Image src="https://picsum.photos/seed/mara-contact/700/600" alt="Studio" fill className="object-cover" unoptimized/>
+            <Image src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=700&q=80" alt="Studio" fill className="object-cover" unoptimized/>
           </div>
         </div>
       </section>
