@@ -394,7 +394,7 @@ export default function HomePage() {
               Agency quality.<br/><span className="text-white/40">Student pricing.</span>
             </motion.h2>
             <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg leading-relaxed">
-              Because I&apos;m a student, my overhead is near zero — which means I pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
+              Because we&apos;re students, our overhead is near zero — which means we pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
             </motion.p>
           </motion.div>
 
@@ -442,7 +442,7 @@ export default function HomePage() {
       <section className="relative z-10 bg-[#ece7de] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.07)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">What I Build</motion.p>
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">What We Build</motion.p>
             <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">One builder, every need.</motion.h2>
           </motion.div>
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
@@ -551,8 +551,8 @@ export default function HomePage() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: "01", title: "Discovery", desc: "We chat about your business, goals, and vision. No jargon — just a real conversation about what you need." },
-              { step: "02", title: "Design & Build", desc: "I design and build from scratch, checking in regularly. You see progress and can give feedback throughout." },
-              { step: "03", title: "Launch", desc: "Your site goes live. I make sure everything runs perfectly and walk you through managing it yourself." },
+              { step: "02", title: "Design & Build", desc: "We design and build from scratch, checking in regularly. You see progress and can give feedback throughout." },
+              { step: "03", title: "Launch", desc: "Your site goes live. We make sure everything runs perfectly and walk you through managing it yourself." },
             ].map((item, i) => (
               <motion.div key={item.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.12 }}
@@ -574,7 +574,7 @@ export default function HomePage() {
               Ready to get started?
             </motion.h2>
             <motion.p variants={fadeUp} className="mt-5 text-lg text-[#888] max-w-md mx-auto">
-              Tell me about your project. I&apos;ll reply within 24 hours with a free quote.
+              Tell us about your project. We&apos;ll reply within 24 hours with a free quote.
             </motion.p>
             <motion.div variants={fadeUp} className="mt-9">
               <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-base font-medium px-9 py-4 rounded-full hover:bg-black transition-all hover:gap-3 hover:shadow-2xl">

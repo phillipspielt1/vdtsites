@@ -106,7 +106,7 @@ function ContactPageInner() {
               </motion.h1>
               <motion.p variants={fadeUp} className="mt-6 text-lg text-[#6e6e73] leading-relaxed">
                 Got a project in mind? Not sure where to start? Reach out and
-                I&apos;ll get back to you within 24 hours.
+                We&apos;ll get back to you within 24 hours.
               </motion.p>
               <motion.div variants={fadeUp} className="mt-10 space-y-4">
                 <div className="flex items-center gap-3 text-[#6e6e73]">
@@ -131,7 +131,7 @@ function ContactPageInner() {
                   </div>
                   <h2 className="text-2xl font-semibold text-[#1d1d1f]">Message sent!</h2>
                   <p className="text-[#6e6e73] max-w-xs">
-                    Thanks — I&apos;ll be in touch within 24 hours.
+                    Thanks — we&apos;ll be in touch within 24 hours.
                   </p>
                   <button
                     onClick={() => setStatus("idle")}
@@ -170,7 +170,7 @@ function ContactPageInner() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-[#1d1d1f] mb-2">Tell me about your project *</label>
+                    <label className="block text-xs font-medium text-[#1d1d1f] mb-2">Tell us about your project *</label>
                     <textarea
                       name="message"
                       rows={5}
@@ -206,7 +206,7 @@ function ContactPageInner() {
                       <><Loader2 size={15} className="animate-spin" /> Sending...</>
                     ) : "Send Message"}
                   </button>
-                  <p className="text-xs text-[#6e6e73] text-center">I&apos;ll get back to you within 24 hours.</p>
+                  <p className="text-xs text-[#6e6e73] text-center">We&apos;ll get back to you within 24 hours.</p>
                 </motion.form>
               )}
             </motion.div>
