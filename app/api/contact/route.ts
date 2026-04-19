@@ -23,6 +23,7 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       access_key: process.env.WEB3FORMS_KEY?.trim(),
+      to: "vdtsites@gmail.com",
       subject: `New enquiry from ${name}${business ? ` — ${business}` : ""}`,
       from_name: "VDT Sites Contact Form",
       name,
