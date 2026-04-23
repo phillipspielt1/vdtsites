@@ -19,8 +19,22 @@ export default function Footer() {
             <Link href="/contact" className="hover:text-[#1d1d1f] transition-colors">Contact</Link>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-black/[0.06] text-xs text-[#6e6e73]">
-          © {new Date().getFullYear()} Van Duist & Treitel. All rights reserved.
+        <div className="mt-8 pt-8 border-t border-black/[0.06] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#6e6e73]">
+          <div>© {new Date().getFullYear()} Van Duist & Treitel. All rights reserved.</div>
+          <a
+            href="https://vdt-ops.pages.dev/#/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-black/[0.08] hover:border-black/20 hover:text-[#1d1d1f] transition-colors"
+          >
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Admin
+          </a>
         </div>
       </div>
     </footer>
