@@ -12,6 +12,9 @@ import {
   jsonLdOrganization,
   jsonLdWebsite,
 } from "@/lib/site";
+import { loadContent } from "@/lib/inline-editor/content-store";
+import { isAdmin } from "@/lib/inline-editor/admin-auth";
+import EditorShell from "@/components/inline-editor/EditorShell";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -96,18 +99,25 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/icon.png",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", sizes: "any" },
+    ],
     apple: "/icon.png",
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const content = await loadContent();
+  const admin = await isAdmin();
   return (
     <html lang="en-CA" className={`${geist.variable} ${cormorant.variable} ${syne.variable} ${lora.variable}`}>
       <body className="antialiased">
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <EditorShell content={content} admin={admin}>
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </EditorShell>
         <SpeedInsights />
         {/* Structured data for local SEO (knowledge panel, rich results) */}
         <script

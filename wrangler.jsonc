@@ -25,5 +25,24 @@
   // Observability on by default so we can see logs in the CF dashboard.
   "observability": {
     "enabled": true
-  }
+  },
+  // Keep the *.workers.dev URL alive as a direct-to-worker test/fallback URL
+  // (bypasses the custom-domain routing layer).
+  "workers_dev": true,
+  // CONTENT_KV - stores inline-editor overrides on top of defaultContent.
+  // Binding name matches the Therapeutic Value pattern so the editor code
+  // ports over unchanged. Namespace is per-site (do not share across sites).
+  "kv_namespaces": [
+    {
+      "binding": "CONTENT_KV",
+      "id": "5145f6cd764748618d672edc0259e3db"
+    }
+  ],
+  // Custom domains. Cloudflare manages DNS automatically (creates the AAAA
+  // record pointing at the worker, replaces any conflicting A records).
+  // Requires vdtsites.com to be a zone on this Cloudflare account.
+  "routes": [
+    { "pattern": "vdtsites.com",     "custom_domain": true },
+    { "pattern": "www.vdtsites.com", "custom_domain": true }
+  ]
 }

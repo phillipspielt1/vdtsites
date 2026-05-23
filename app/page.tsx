@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Globe, ShoppingBag, User, Zap, Layers, Check, GraduationCap, MapPin, Users, MessageCircle } from "lucide-react";
+import { ArrowRight, Globe, ShoppingBag, User, Zap, Layers, Check, GraduationCap, MapPin, Users, MessageCircle, type LucideIcon } from "lucide-react";
+import { useContentCtx } from "@/components/inline-editor/content-context";
+import Editable from "@/components/inline-editor/Editable";
+import EditableList from "@/components/inline-editor/EditableList";
+import type { CtaItem, ServiceItem, ShowcaseItem, StatItem, LocalPoint, ProcessStep, SectionKey } from "@/lib/site-content";
+import { SECTION_KEYS } from "@/lib/site-content";
 
 /* ─── Preview Mockups - real photography + styled layouts ─── */
 
@@ -198,25 +203,32 @@ function EcommercePreview() {
   );
 }
 
-/* ─── Data ─────────────────────────────────────────────── */
-const showcases = [
-  { href: "/showcase/minimal",      label: "Minimal",       tag: "Photography · Portfolio",   description: "Editorial space and quiet confidence. Perfect for creatives whose work does the talking.", Preview: MinimalPreview },
-  { href: "/showcase/playful",      label: "Playful",        tag: "Café · Food & Drink",       description: "Bold colour and personality. Brands that want to be remembered.", Preview: PlayfulPreview },
-  { href: "/showcase/professional", label: "Professional",   tag: "Finance · Consulting",      description: "Structured, trustworthy, polished. Authority in every pixel.", Preview: ProfessionalPreview },
-  { href: "/showcase/bold",         label: "Bold & Dark",    tag: "Events · Luxury",           description: "Cinematic and dramatic. For brands that leave a lasting mark.", Preview: BoldPreview },
-  { href: "/showcase/ecommerce",    label: "E-Commerce",     tag: "Retail · Artisan Goods",    description: "Warm, story-driven, and built to convert. Products showcased beautifully.", Preview: EcommercePreview },
-  { href: "/showcase/trades",       label: "Trades & Services", tag: "Home Services · Local Business", description: "Conversion-first for local trades. Built to get calls, quotes, and bookings.", Preview: TradesPreview },
-];
+/* ─── Icon + Preview lookups ───────────────────────────── */
 
-const services = [
-  { icon: Globe,       label: "Landing Pages",        desc: "Convert visitors into customers with a focused, high-impact single page." },
-  { icon: User,        label: "Portfolios",            desc: "Showcase your work with a site built to impress the right people." },
-  { icon: ShoppingBag, label: "Online Stores",         desc: "Sell products with a smooth, beautiful shopping experience." },
-  { icon: Zap,         label: "Small Business Sites",  desc: "Everything your business needs online - found, trusted, and chosen." },
-  { icon: Layers,      label: "Custom Builds",         desc: "Got something unique in mind? Let's figure it out together." },
-];
+const previewMap: Record<string, React.ComponentType> = {
+  minimal: MinimalPreview,
+  playful: PlayfulPreview,
+  professional: ProfessionalPreview,
+  bold: BoldPreview,
+  ecommerce: EcommercePreview,
+  trades: TradesPreview,
+};
 
-const marqueeItems = ["Minimal","Playful","Professional","Bold & Dark","E-Commerce","Trades & Services","Responsive","Fast","Modern","Custom","Clean","Strategic"];
+const serviceIconMap: Record<ServiceItem["iconKey"], LucideIcon> = {
+  globe: Globe,
+  user: User,
+  "shopping-bag": ShoppingBag,
+  zap: Zap,
+  layers: Layers,
+};
+
+const localIconMap: Record<LocalPoint["iconKey"], LucideIcon> = {
+  "map-pin": MapPin,
+  users: Users,
+  "message-circle": MessageCircle,
+};
+
+/* ─── Animation variants ───────────────────────────────── */
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -224,71 +236,102 @@ const fadeUp = {
 };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
 
-/* ─── Page ─────────────────────────────────────────────── */
-export default function HomePage() {
+/* ─── Editable list templates (used by EditableList "+ add below") ─── */
+const serviceTemplate: ServiceItem = { iconKey: "globe", label: "New service", desc: "Describe it here." };
+const localPointTemplate: LocalPoint = { iconKey: "map-pin", label: "New point", sub: "Subtitle" };
+const statTemplate: StatItem = { value: "0", label: "New stat" };
+const processStepTemplate: ProcessStep = { step: "04", title: "New step", desc: "Describe it." };
+const ctaTemplate: CtaItem = { label: "New button", href: "/contact", primary: false };
+
+/* ─── Section renderers ────────────────────────────────── */
+
+function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 600], [0, -100]);
   const heroOpacity = useTransform(scrollY, [0, 450], [1, 0]);
+  const { content } = useContentCtx();
+  const showcaseItems = content.home.showcase.items;
+  const ctas = content.home.hero.ctas;
 
   return (
-    <div className="bg-white">
+    <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-[#ece7de]">
+      <div className="absolute inset-0 opacity-[0.018]" style={{
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        backgroundRepeat: "repeat",
+        backgroundSize: "120px",
+      }}/>
 
-      {/* ── HERO ── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-[#ece7de]">
-        <div className="absolute inset-0 opacity-[0.018]" style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          backgroundRepeat: "repeat",
-          backgroundSize: "120px",
-        }}/>
+      <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-16 items-center">
 
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24 pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-16 items-center">
+          <motion.div initial="hidden" animate="show" variants={stagger}>
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-[11px] font-medium px-3 py-1.5 rounded-full mb-7">
+              <GraduationCap size={12}/>
+              <Editable path="home.hero.badge" />
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-[clamp(3rem,7vw,6.5rem)] font-semibold text-[#1a1a1a] leading-[1.02] tracking-[-0.03em]">
+              <Editable path="home.hero.titlePart1" /><br />
+              <Editable path="home.hero.titlePart2" className="text-[#999]" />
+            </motion.h1>
+            <motion.p variants={fadeUp} className="mt-7 text-lg text-[#666] max-w-lg leading-relaxed">
+              <Editable path="home.hero.subtitle" />
+            </motion.p>
 
-            {/* Left */}
-            <motion.div initial="hidden" animate="show" variants={stagger}>
-              <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-[11px] font-medium px-3 py-1.5 rounded-full mb-7">
-                <GraduationCap size={12}/>
-                Student rates · Professional results
-              </motion.div>
-              <motion.h1 variants={fadeUp} className="text-[clamp(3rem,7vw,6.5rem)] font-semibold text-[#1a1a1a] leading-[1.02] tracking-[-0.03em]">
-                Websites built<br />
-                <span className="text-[#999]">to impress.</span>
-              </motion.h1>
-              <motion.p variants={fadeUp} className="mt-7 text-lg text-[#666] max-w-lg leading-relaxed">
-                Custom websites for small businesses, portfolios, and online stores - at a fraction of agency prices, without the compromise.
-              </motion.p>
-              <motion.div variants={fadeUp} className="mt-10 flex flex-wrap gap-3">
-                <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-sm font-medium px-6 py-3.5 rounded-full hover:bg-black transition-all hover:gap-3">
-                  Get a free quote <ArrowRight size={14} />
-                </Link>
-                <Link href="#showcase" className="inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a] px-6 py-3.5 rounded-full border border-black/15 hover:bg-white transition-colors">
-                  See the work
-                </Link>
-              </motion.div>
-              <motion.div variants={fadeUp} className="mt-14 flex items-center gap-8">
-                {[["5+","Design styles"],["~50%","Less than agencies"],["100%","Custom code"]].map(([v,l])=>(
-                  <div key={l}>
-                    <div className="text-lg font-semibold text-[#1a1a1a]">{v}</div>
-                    <div className="text-xs text-[#999] mt-0.5">{l}</div>
-                  </div>
-                ))}
-              </motion.div>
+            <motion.div variants={fadeUp} className="mt-10 flex flex-wrap gap-3">
+              <EditableList<CtaItem>
+                path="home.hero.ctas"
+                template={ctaTemplate}
+                itemClassName="inline-flex"
+                minItems={1}
+              >
+                {(cta, i) => (
+                  <Link
+                    href={cta.href}
+                    className={
+                      cta.primary
+                        ? "inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-sm font-medium px-6 py-3.5 rounded-full hover:bg-black transition-all hover:gap-3"
+                        : "inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a] px-6 py-3.5 rounded-full border border-black/15 hover:bg-white transition-colors"
+                    }
+                  >
+                    <Editable path={`home.hero.ctas[${i}].label`} />
+                    {cta.primary && <ArrowRight size={14} />}
+                  </Link>
+                )}
+              </EditableList>
             </motion.div>
 
-            {/* Right: Symmetric 3×2 preview grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:grid grid-cols-3 gap-2.5"
-              style={{ gridTemplateRows: "138px 138px" }}
-            >
-              {showcases.map((s) => (
-                <Link key={s.href} href={s.href}
+            <motion.div variants={fadeUp} className="mt-14 flex items-center gap-8">
+              <EditableList<StatItem>
+                path="home.hero.stats"
+                template={statTemplate}
+                itemClassName="min-w-0"
+                minItems={1}
+              >
+                {(_item, i) => (
+                  <>
+                    <Editable path={`home.hero.stats[${i}].value`} as="div" className="text-lg font-semibold text-[#1a1a1a]" />
+                    <Editable path={`home.hero.stats[${i}].label`} as="div" className="text-xs text-[#999] mt-0.5" />
+                  </>
+                )}
+              </EditableList>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden lg:grid grid-cols-3 gap-2.5"
+            style={{ gridTemplateRows: "138px 138px" }}
+          >
+            {showcaseItems.map((s) => {
+              const Preview = previewMap[s.key];
+              return (
+                <Link key={s.key} href={s.href}
                   className="group rounded-xl overflow-hidden border border-black/[0.08] shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                   <div className="w-full h-full relative">
-                    <s.Preview />
+                    {Preview ? <Preview /> : null}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
                       <span className="text-white text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded-full">
                         {s.label} →
@@ -296,243 +339,362 @@ export default function HomePage() {
                     </div>
                   </div>
                 </Link>
-              ))}
-            </motion.div>
-
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ── MARQUEE ── */}
-      <div className="relative z-10 bg-[#f5f2ec] -mt-3 rounded-t-[2rem] overflow-hidden border-b border-black/[0.07] shadow-[0_-12px_40px_rgba(0,0,0,0.10)]">
-        <div className="py-4 overflow-hidden">
-          <div className="animate-marquee">
-            {[...marqueeItems,...marqueeItems].map((item,i)=>(
-              <span key={i} className="inline-flex items-center gap-5 text-[11px] font-medium tracking-[0.18em] uppercase text-[#aaa] mx-5">
-                {item}<span className="w-1 h-1 rounded-full bg-black/20 inline-block"/>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── SHOWCASE GRID ── */}
-      <section id="showcase" className="bg-white py-24 px-6 border-t border-black/[0.05]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">Design Showcase</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">Every business is different.</motion.h2>
-            <motion.p variants={fadeUp} className="mt-3 text-base text-[#888] max-w-lg">Five fully built demo sites - each a completely different style. Click any to explore the full layout.</motion.p>
+              );
+            })}
           </motion.div>
 
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} variants={stagger}
-            className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {showcases.map((s) => (
-              <motion.div key={s.href} variants={fadeUp}>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function MarqueeSection() {
+  const { content } = useContentCtx();
+  const items = content.home.marquee;
+  return (
+    <div className="relative z-10 bg-[#f5f2ec] -mt-3 rounded-t-[2rem] overflow-hidden border-b border-black/[0.07] shadow-[0_-12px_40px_rgba(0,0,0,0.10)]">
+      <div className="py-4 overflow-hidden">
+        <div className="animate-marquee">
+          {[...items, ...items].map((item, i) => (
+            <span key={i} className="inline-flex items-center gap-5 text-[11px] font-medium tracking-[0.18em] uppercase text-[#aaa] mx-5">
+              {item}<span className="w-1 h-1 rounded-full bg-black/20 inline-block"/>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShowcaseSection() {
+  const { content } = useContentCtx();
+  const showcaseItems = content.home.showcase.items;
+  return (
+    <section id="showcase" className="bg-white py-24 px-6 border-t border-black/[0.05]">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
+          <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3"><Editable path="home.showcase.eyebrow" /></motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight"><Editable path="home.showcase.title" /></motion.h2>
+          <motion.p variants={fadeUp} className="mt-3 text-base text-[#888] max-w-lg"><Editable path="home.showcase.subtitle" /></motion.p>
+        </motion.div>
+
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} variants={stagger}
+          className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {showcaseItems.map((s: ShowcaseItem, i) => {
+            const Preview = previewMap[s.key];
+            return (
+              <motion.div key={s.key} variants={fadeUp}>
                 <Link href={s.href} className="group block">
                   <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.3, ease: [0.22,1,0.36,1] }}
                     className="rounded-2xl overflow-hidden border border-black/[0.07] shadow-sm hover:shadow-xl transition-shadow duration-400">
                     <div className="h-52 relative overflow-hidden">
-                      <s.Preview />
+                      {Preview ? <Preview /> : null}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-300 flex items-center justify-center">
                         <span className="bg-white text-[#1a1a1a] text-xs font-semibold px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-lg">
-                          View full demo →
+                          {content.home.showcase.viewLabel}
                         </span>
                       </div>
                     </div>
                     <div className="p-5 bg-white">
                       <div className="flex items-start justify-between">
                         <div>
-                          <div className="text-[10px] uppercase tracking-widest text-[#999] font-medium">{s.tag}</div>
-                          <h3 className="mt-0.5 text-lg font-semibold text-[#1a1a1a]">{s.label}</h3>
+                          <Editable as="div" path={`home.showcase.items[${i}].tag`} className="text-[10px] uppercase tracking-widest text-[#999] font-medium" />
+                          <Editable as="h3" path={`home.showcase.items[${i}].label`} className="mt-0.5 text-lg font-semibold text-[#1a1a1a]" />
                         </div>
                         <div className="w-7 h-7 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-[#1a1a1a] group-hover:border-[#1a1a1a] transition-colors">
                           <ArrowRight size={12} className="text-[#999] group-hover:text-white transition-colors"/>
                         </div>
                       </div>
-                      <p className="mt-2 text-sm text-[#888] leading-relaxed">{s.description}</p>
+                      <Editable as="p" path={`home.showcase.items[${i}].description`} className="mt-2 text-sm text-[#888] leading-relaxed" />
                     </div>
                   </motion.div>
                 </Link>
               </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
-      {/* ── VALUE PROP + CONTACT CTA ── */}
-      <section className="relative z-10 bg-[#1a1a1a] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-12px_50px_rgba(0,0,0,0.12)]">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-white/10 text-white/70 text-[11px] font-medium px-3 py-1.5 rounded-full mb-6">
-              <GraduationCap size={12}/>
-              VIU Student · Vancouver Island, BC
-            </motion.div>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
-              Agency quality.<br/><span className="text-white/40">Student pricing.</span>
+function ValuePropSection() {
+  return (
+    <section className="relative z-10 bg-[#1a1a1a] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-12px_50px_rgba(0,0,0,0.12)]">
+      <div className="max-w-3xl mx-auto text-center">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-white/10 text-white/70 text-[11px] font-medium px-3 py-1.5 rounded-full mb-6">
+            <GraduationCap size={12}/>
+            <Editable path="home.valueProp.badge" />
+          </motion.div>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
+            <Editable path="home.valueProp.titlePart1" /><br/>
+            <Editable path="home.valueProp.titlePart2" className="text-white/40" />
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg mx-auto leading-relaxed">
+            <Editable path="home.valueProp.body" />
+          </motion.p>
+          <motion.div variants={fadeUp} className="mt-10">
+            <Link href="/contact"
+              className="inline-flex items-center gap-2 bg-white text-[#1a1a1a] text-sm font-medium px-7 py-3.5 rounded-full transition-all hover:gap-3 hover:bg-white/90">
+              <Editable path="home.valueProp.ctaLabel" /> <ArrowRight size={14}/>
+            </Link>
+            <p className="mt-5 text-xs text-white/30">
+              <Editable path="home.valueProp.caption" />
+            </p>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function ServicesSection() {
+  return (
+    <section className="relative z-10 bg-[#ece7de] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.07)]">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3"><Editable path="home.services.eyebrow" /></motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight"><Editable path="home.services.title" /></motion.h2>
+        </motion.div>
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
+          className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <EditableList<ServiceItem>
+            path="home.services.items"
+            template={serviceTemplate}
+            itemClassName="bg-white rounded-2xl p-6 border border-black/[0.06]"
+            minItems={1}
+          >
+            {(svc, i) => {
+              const Icon = serviceIconMap[svc.iconKey] ?? Globe;
+              return (
+                <>
+                  <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center mb-4">
+                    <Icon size={16} className="text-[#1a1a1a]"/>
+                  </div>
+                  <Editable as="h3" path={`home.services.items[${i}].label`} className="font-semibold text-[#1a1a1a] mb-1" />
+                  <Editable as="p" path={`home.services.items[${i}].desc`} className="text-sm text-[#888] leading-relaxed" />
+                </>
+              );
+            }}
+          </EditableList>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function LocalSection() {
+  return (
+    <section className="relative z-10 bg-[#f5f4f1] py-20 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
+          className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center">
+          <div>
+            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3"><Editable path="home.local.eyebrow" /></motion.p>
+            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">
+              <Editable path="home.local.titlePart1" /><br />
+              <Editable path="home.local.titlePart2" />
             </motion.h2>
-            <motion.p variants={fadeUp} className="mt-5 text-base text-white/50 max-w-lg mx-auto leading-relaxed">
-              Because we&apos;re students, our overhead is near zero - which means we pass those savings directly to you. You get a professional, custom-built website for a fraction of what a studio charges.
+            <motion.p variants={fadeUp} className="mt-5 text-base text-[#666] max-w-xl leading-relaxed">
+              <Editable path="home.local.body" />
             </motion.p>
-            <motion.div variants={fadeUp} className="mt-10">
-              <Link href="/contact"
-                className="inline-flex items-center gap-2 bg-white text-[#1a1a1a] text-sm font-medium px-7 py-3.5 rounded-full transition-all hover:gap-3 hover:bg-white/90">
-                Get a quote <ArrowRight size={14}/>
-              </Link>
-              <p className="mt-5 text-xs text-white/30">
-                Every project gets a custom quote - no surprises.
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── SERVICES ── */}
-      <section className="relative z-10 bg-[#ece7de] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.07)]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">What We Build</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">One builder, every need.</motion.h2>
-          </motion.div>
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
-            className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {services.map((svc) => (
-              <motion.div key={svc.label} variants={fadeUp} whileHover={{ y: -3 }} transition={{ duration: 0.25 }}
-                className="bg-white rounded-2xl p-6 border border-black/[0.06]">
-                <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center mb-4">
-                  <svc.icon size={16} className="text-[#1a1a1a]"/>
-                </div>
-                <h3 className="font-semibold text-[#1a1a1a] mb-1">{svc.label}</h3>
-                <p className="text-sm text-[#888] leading-relaxed">{svc.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── LOCAL & HONEST ── */}
-      <section className="relative z-10 bg-[#f5f4f1] py-20 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}
-            className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center">
-            <div>
-              <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">Who We Are</motion.p>
-              <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">
-                Two people.<br />No nonsense.
-              </motion.h2>
-              <motion.p variants={fadeUp} className="mt-5 text-base text-[#666] max-w-xl leading-relaxed">
-                We&apos;re a two-person operation based right here in Nanaimo, BC - not an agency, not a faceless online shop. Just two people who genuinely care about the work and the businesses behind it. We keep things straight with you, communicate clearly, and we&apos;re always happy to have a conversation before you commit to anything. No pressure, no pitch - just a chat.
-              </motion.p>
-            </div>
-            <motion.div variants={fadeUp} className="flex flex-col gap-5 lg:min-w-[240px]">
-              {[
-                { icon: MapPin,         label: "Nanaimo, BC",       sub: "Locally based, locally invested" },
-                { icon: Users,          label: "Two-person team",   sub: "You work with us, not past us" },
-                { icon: MessageCircle,  label: "Always happy to chat", sub: "Reach out any time - no obligation" },
-              ].map(item => (
-                <div key={item.label} className="flex items-start gap-3.5">
-                  <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center flex-shrink-0 border border-black/[0.06]">
-                    <item.icon size={15} className="text-[#1a1a1a]" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-[#1a1a1a]">{item.label}</div>
-                    <div className="text-xs text-[#999] mt-0.5">{item.sub}</div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── ABOUT ── */}
-      <section className="relative z-10 bg-white py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.09)]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">About Us</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">Young, driven,<br/>built for this.</motion.h2>
-            <motion.p variants={fadeUp} className="mt-6 text-base text-[#666] leading-relaxed">
-              We&apos;re Van Duist &amp; Treitel - two VIU students based in Nanaimo, BC, combining a genuine passion for design with a business-minded approach to every project.
-            </motion.p>
-            <motion.p variants={fadeUp} className="mt-4 text-base text-[#666] leading-relaxed">
-              Being students means low overhead and big motivation. Every site we build is crafted to not just look good, but to actually work for your goals.
-            </motion.p>
-            <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2">
-              {["No agency markup - you pay for work, not overhead","Fast turnaround - most projects done in 1–3 weeks","Direct communication - you work with us, not a middleman"].map(pt=>(
-                <div key={pt} className="flex items-start gap-2.5">
-                  <Check size={14} className="text-[#1a1a1a] mt-0.5 flex-shrink-0"/>
-                  <span className="text-sm text-[#555]">{pt}</span>
-                </div>
-              ))}
-            </motion.div>
-            <motion.div variants={fadeUp} className="mt-8">
-              <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a] hover:gap-3 transition-all">
-                Let&apos;s work together <ArrowRight size={14}/>
-              </Link>
-            </motion.div>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22,1,0.36,1] }}
-            className="rounded-3xl bg-[#1a1a1a] h-80 md:h-96 flex items-center justify-center relative overflow-hidden">
-            <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-white/[0.04] rounded-full blur-2xl"/>
-            <div className="text-center relative z-10">
-              <div className="w-20 h-20 rounded-full bg-white/10 border border-white/15 mx-auto mb-4 flex items-center justify-center">
-                <span className="text-white text-xl font-semibold">VDT</span>
-              </div>
-              <div className="text-sm text-white/80 font-medium">Van Duist & Treitel</div>
-              <div className="text-xs text-white/40 mt-1">VIU · Nanaimo, BC</div>
-              <div className="flex flex-col items-center gap-2 mt-4">
-                <span className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full">International Business + Marketing</span>
-                <span className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full">Two-person team · Web Design</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── PROCESS ── */}
-      <section className="relative z-10 bg-[#f7f3ee] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3">How It Works</motion.p>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">Simple process.<br/>Great results.</motion.h2>
-          </motion.div>
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: "01", title: "Discovery", desc: "We chat about your business, goals, and vision. No jargon - just a real conversation about what you need." },
-              { step: "02", title: "Design & Build", desc: "We design and build from scratch, checking in regularly. You see progress and can give feedback throughout." },
-              { step: "03", title: "Launch", desc: "Your site goes live. We make sure everything runs perfectly and walk you through managing it yourself." },
-            ].map((item, i) => (
-              <motion.div key={item.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.12 }}
-                className="bg-white rounded-2xl p-8 border border-black/[0.06]">
-                <div className="text-4xl font-semibold text-black/[0.06] mb-5 font-mono">{item.step}</div>
-                <h3 className="text-lg font-semibold text-[#1a1a1a] mb-3">{item.title}</h3>
-                <p className="text-[#888] text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="relative z-10 bg-white py-32 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-            <motion.h2 variants={fadeUp} className="text-4xl md:text-[3.5rem] font-semibold text-[#1a1a1a] tracking-tight">
-              Ready to get started?
-            </motion.h2>
-            <motion.p variants={fadeUp} className="mt-5 text-lg text-[#888] max-w-md mx-auto">
-              Tell us about your project. We&apos;ll reply within 24 hours with a free quote.
-            </motion.p>
-            <motion.div variants={fadeUp} className="mt-9">
-              <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-base font-medium px-9 py-4 rounded-full hover:bg-black transition-all hover:gap-3 hover:shadow-2xl">
-                Get in touch <ArrowRight size={16}/>
-              </Link>
-            </motion.div>
+          <motion.div variants={fadeUp} className="flex flex-col gap-5 lg:min-w-[240px]">
+            <EditableList<LocalPoint>
+              path="home.local.points"
+              template={localPointTemplate}
+              itemClassName="flex items-start gap-3.5"
+              minItems={1}
+            >
+              {(item, i) => {
+                const Icon = localIconMap[item.iconKey] ?? MapPin;
+                return (
+                  <>
+                    <div className="w-9 h-9 bg-[#f5f4f2] rounded-xl flex items-center justify-center flex-shrink-0 border border-black/[0.06]">
+                      <Icon size={15} className="text-[#1a1a1a]" />
+                    </div>
+                    <div>
+                      <Editable as="div" path={`home.local.points[${i}].label`} className="text-sm font-semibold text-[#1a1a1a]" />
+                      <Editable as="div" path={`home.local.points[${i}].sub`} className="text-xs text-[#999] mt-0.5" />
+                    </div>
+                  </>
+                );
+              }}
+            </EditableList>
           </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function AboutSection() {
+  return (
+    <section className="relative z-10 bg-white py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.09)]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3"><Editable path="home.about.eyebrow" /></motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight leading-tight">
+            <Editable path="home.about.titlePart1" /><br/>
+            <Editable path="home.about.titlePart2" />
+          </motion.h2>
+          <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-4">
+            <EditableList<string>
+              path="home.about.paragraphs"
+              template=""
+              minItems={1}
+            >
+              {(_para, i) => (
+                <Editable as="p" path={`home.about.paragraphs[${i}]`} className="text-base text-[#666] leading-relaxed" />
+              )}
+            </EditableList>
+          </motion.div>
+          <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2">
+            <EditableList<string>
+              path="home.about.bullets"
+              template="New benefit"
+              itemClassName="flex items-start gap-2.5"
+              minItems={1}
+            >
+              {(_pt, i) => (
+                <>
+                  <Check size={14} className="text-[#1a1a1a] mt-0.5 flex-shrink-0"/>
+                  <Editable path={`home.about.bullets[${i}]`} className="text-sm text-[#555]" />
+                </>
+              )}
+            </EditableList>
+          </motion.div>
+          <motion.div variants={fadeUp} className="mt-8">
+            <Link href="/contact" className="inline-flex items-center gap-2 text-sm font-medium text-[#1a1a1a] hover:gap-3 transition-all">
+              <Editable path="home.about.ctaLabel" /> <ArrowRight size={14}/>
+            </Link>
+          </motion.div>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22,1,0.36,1] }}
+          className="rounded-3xl bg-[#1a1a1a] h-80 md:h-96 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-white/[0.04] rounded-full blur-2xl"/>
+          <div className="text-center relative z-10">
+            <div className="w-20 h-20 rounded-full bg-white/10 border border-white/15 mx-auto mb-4 flex items-center justify-center">
+              <span className="text-white text-xl font-semibold">VDT</span>
+            </div>
+            <Editable as="div" path="home.about.card.name" className="text-sm text-white/80 font-medium" />
+            <Editable as="div" path="home.about.card.sub" className="text-xs text-white/40 mt-1" />
+            <div className="flex flex-col items-center gap-2 mt-4">
+              <EditableList<string>
+                path="home.about.card.tags"
+                template="New tag"
+                itemClassName="inline-block"
+                minItems={1}
+              >
+                {(_tag, i) => (
+                  <Editable as="span" path={`home.about.card.tags[${i}]`} className="text-[10px] text-white/30 bg-white/5 px-3 py-1 rounded-full" />
+                )}
+              </EditableList>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function ProcessSection() {
+  return (
+    <section className="relative z-10 bg-[#f7f3ee] py-24 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.p variants={fadeUp} className="text-[10px] uppercase tracking-[0.22em] text-[#999] font-medium mb-3"><Editable path="home.process.eyebrow" /></motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-semibold text-[#1a1a1a] tracking-tight">
+            <Editable path="home.process.titlePart1" /><br/>
+            <Editable path="home.process.titlePart2" />
+          </motion.h2>
+        </motion.div>
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <EditableList<ProcessStep>
+            path="home.process.steps"
+            template={processStepTemplate}
+            itemClassName="bg-white rounded-2xl p-8 border border-black/[0.06]"
+            minItems={1}
+          >
+            {(_item, i) => (
+              <>
+                <Editable as="div" path={`home.process.steps[${i}].step`} className="text-4xl font-semibold text-black/[0.06] mb-5 font-mono" />
+                <Editable as="h3" path={`home.process.steps[${i}].title`} className="text-lg font-semibold text-[#1a1a1a] mb-3" />
+                <Editable as="p" path={`home.process.steps[${i}].desc`} className="text-[#888] text-sm leading-relaxed" />
+              </>
+            )}
+          </EditableList>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
+
+function CtaSection() {
+  return (
+    <section className="relative z-10 bg-white py-32 px-6 rounded-t-[2rem] -mt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
+      <div className="max-w-7xl mx-auto text-center">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-[3.5rem] font-semibold text-[#1a1a1a] tracking-tight">
+            <Editable path="home.cta.title" />
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-lg text-[#888] max-w-md mx-auto">
+            <Editable path="home.cta.subtitle" />
+          </motion.p>
+          <motion.div variants={fadeUp} className="mt-9">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white text-base font-medium px-9 py-4 rounded-full hover:bg-black transition-all hover:gap-3 hover:shadow-2xl">
+              <Editable path="home.cta.buttonLabel" /> <ArrowRight size={16}/>
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+const sectionRenderers: Record<SectionKey, () => ReactNode> = {
+  hero: HeroSection,
+  marquee: MarqueeSection,
+  showcase: ShowcaseSection,
+  valueProp: ValuePropSection,
+  services: ServicesSection,
+  local: LocalSection,
+  about: AboutSection,
+  process: ProcessSection,
+  cta: CtaSection,
+};
+
+/* ─── Page ─────────────────────────────────────────────── */
+export default function HomePage() {
+  const { content } = useContentCtx();
+  // Defensive: if KV-stored sectionOrder is somehow missing a key the
+  // renderer knows about, append it; if it has unknown keys, ignore them.
+  const order: SectionKey[] = (content.home.sectionOrder ?? []).filter((k) =>
+    (SECTION_KEYS as readonly string[]).includes(k)
+  ) as SectionKey[];
+  for (const k of SECTION_KEYS) {
+    if (!order.includes(k)) order.push(k);
+  }
+
+  return (
+    <div className="bg-white">
+      <EditableList<SectionKey>
+        path="home.sectionOrder"
+        template={"cta"}
+        disableInsert
+        disableRemove
+        dragMode="handle-only"
+        toolbarPosition="top-4 right-4"
+        minItems={order.length}
+      >
+        {(key) => {
+          const Section = sectionRenderers[key];
+          return Section ? <Section /> : null;
+        }}
+      </EditableList>
     </div>
   );
 }
