@@ -10,7 +10,8 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "vdtsites",
+  // Renamed from vdtsites to prevent overwriting the production agency site worker. This sandbox deploys to its own worker name.
+  "name": "vdttest",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-10-01",
   // nodejs_compat             - let Next/Node libs run on the Workers runtime
