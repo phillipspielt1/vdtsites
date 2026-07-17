@@ -39,11 +39,10 @@
       "id": "5145f6cd764748618d672edc0259e3db"
     }
   ],
-  // Custom domains. Cloudflare manages DNS automatically (creates the AAAA
-  // record pointing at the worker, replaces any conflicting A records).
-  // Requires vdtsites.com to be a zone on this Cloudflare account.
-  "routes": [
-    { "pattern": "vdtsites.com",     "custom_domain": true },
-    { "pattern": "www.vdtsites.com", "custom_domain": true }
-  ]
+  // Custom-domain routes removed on purpose. This sandbox previously claimed
+  // vdtsites.com and www.vdtsites.com, so any deploy from this repo would have
+  // pulled the production agency site's traffic onto this worker. The sandbox
+  // is reachable via its *.workers.dev URL only. Do not add production domains
+  // back here.
+  "routes": []
 }
